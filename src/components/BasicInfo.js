@@ -28,7 +28,6 @@ const BasicInfo = () => {
         const raceResults = await getRaces();
 
         if (classResults && raceResults) {
-            console.log(raceResults);
 
             const classData = classResults.map(classes => {
                 return {
@@ -64,7 +63,6 @@ const BasicInfo = () => {
     }
 
     const handleSubmit = (e) => {
-        console.log(e);
         const chosenClass = e.chosenClass.name;
         const chosenRace = e.chosenRace.name;
 
