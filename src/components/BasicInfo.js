@@ -18,8 +18,8 @@ const BasicInfo = () => {
     const [getName, setName] = useState("");
     const [classOptions, setClassOptions] = useState([]);
     const [raceOptions, setRaceResults] = useState([]);
-    const [getClass] = useState("");
-    const [getRace] = useState("");
+    const [getClass, setGetClass] = useState("");
+    const [getRace, setGetRace] = useState("");
     const [proficiencies] = useState([]);
     const [languages] = useState([]);
 
@@ -54,6 +54,14 @@ const BasicInfo = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const onClassChange = (e) => {
+        setGetClass(e.value.value);
+    }
+
+    const onRaceChange = (e) => {
+        setGetRace(e.value.value);
+    }
 
     const handleSubmit = (e) => {
         const chosenClass = e.chosenClass.name;
@@ -94,6 +102,7 @@ const BasicInfo = () => {
                                     style={{ marginTop: '1rem' }}
                                     optionLabel="label"
                                     options={raceOptions}
+                                    onChange={onRaceChange}
                                     placeholder="Select D&D Race" />} />
                             <ErrorMessage name='chosenRace' />
 
@@ -105,6 +114,7 @@ const BasicInfo = () => {
                                     optionLabel="label"
                                     options={classOptions}
                                     value={classOptions}
+                                    onChange={onClassChange}
                                     placeholder="Select D&D Class" />} />
                             <ErrorMessage name='chosenClass' />
                             <Button label="Select" className="dropdownFormElement dropdownFormButton p-button-raised" style={{ marginTop: '1rem' }} />
