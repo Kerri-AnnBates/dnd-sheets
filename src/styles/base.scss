@@ -34,7 +34,7 @@ body {
 }
 
 .app-container {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
     border-radius: 0.5rem;
     border: 1px solid var(--black);
@@ -49,3 +49,8 @@ body {
     width: 100%;
 }
 
+@media (min-width: 350px) {
+  .app-container {
+    width: 80%;
+  }
+}
