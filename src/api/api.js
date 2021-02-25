@@ -39,7 +39,6 @@ export const getProficiencies = (classType) => {
 export const getLanguages = (race) => {
     const results = axios.get(`http://www.dnd5eapi.co/api/races/${race}`)
         .then(res => {
-            console.log(res.data.languages);
             return res.data.languages;
 
         })

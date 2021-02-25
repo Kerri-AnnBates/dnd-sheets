@@ -10,8 +10,8 @@ import { getClasses, getRaces, getProficiencies, getLanguages } from '../api/api
 
 const basicInfoSchema = Yup.object().shape({
     chosenName: Yup.string().notRequired(),
-    // chosenClass: Yup.string().required('Class is required'),
-    // chosenRace: Yup.string().required('Race is required'),
+    chosenClass: Yup.string().required('Class is required'),
+    chosenRace: Yup.string().required('Race is required'),
 });
 
 const BasicInfo = () => {
@@ -64,10 +64,9 @@ const BasicInfo = () => {
     }
 
     const handleSubmit = (e) => {
+        console.log(e);
         const chosenClass = e.chosenClass.name;
         const chosenRace = e.chosenRace.name;
-        // console.log("chosen class:", chosenClass);
-        // console.log("chosen race:", chosenRace);
 
         if (getRace) {
             getLanguages(getRace)
@@ -111,7 +110,7 @@ const BasicInfo = () => {
                     chosenClass: "",
                     chosenRace: ""
                 }}
-                validationSchema={basicInfoSchema}
+                // validationSchema={basicInfoSchema}
                 onSubmit={e => handleSubmit(e)}
             >
                 {() => (
@@ -129,6 +128,7 @@ const BasicInfo = () => {
                                         optionLabel={raceOptions.label}
                                         value={getRace}
                                         onChange={handleRaceChange}
+                                        required
                                         placeholder="Select D&D Race" />}
                             </Field>
                             <ErrorMessage name='chosenRace' />
@@ -144,6 +144,7 @@ const BasicInfo = () => {
                                         options={classOptions}
                                         optionLabel={classOptions.label}
                                         value={getClass}
+                                        required
                                         onChange={handleClassChange}
                                         placeholder="Select D&D Class" />}
                             </Field>
