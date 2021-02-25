@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { createProficienciesList } from './createProficienciesList';
 import { createLanguagesList } from './createLanguagesList';
-import { getClasses } from '../api/api';
+import { getClasses, getRaces } from '../api/api';
 
 const basicInfoSchema = Yup.object().shape({
     chosenName: Yup.string().notRequired(),
@@ -17,33 +17,42 @@ const basicInfoSchema = Yup.object().shape({
 const BasicInfo = () => {
     const [getName, setName] = useState("");
     const [classOptions, setClassOptions] = useState([]);
-    const [raceOptions] = useState([]);
+    const [raceOptions, setRaceResults] = useState([]);
     const [getClass] = useState("");
     const [getRace] = useState("");
     const [proficiencies] = useState([]);
     const [languages] = useState([]);
 
-    const fetchClasses = async () => {
-        const results = await getClasses();
+    const fetchData = async () => {
+        const classResults = await getClasses();
+        const raceResults = await getRaces();
 
-        if (results) {
-            // console.log(results);
+        if (classResults && raceResults) {
+            console.log(raceResults);
 
-            const classesData = results.map(classes => {
+            const classData = classResults.map(classes => {
                 return {
                     label: classes.name,
                     value: classes.index
                 }
-            })
-            console.log(classesData);
-            setClassOptions(classesData);
+            });
+
+            const raceData = raceResults.map(races => {
+                return {
+                    label: races.name,
+                    value: races.index
+                }
+            });
+
+            setClassOptions(classData);
+            setRaceResults(raceData);
         } else {
             console.log("Error");
         }
     }
 
     useEffect(() => {
-        fetchClasses();
+        fetchData();
     }, []);
 
     const handleSubmit = (e) => {
@@ -83,7 +92,7 @@ const BasicInfo = () => {
                                     {...field}
                                     className="dropdownFormElement"
                                     style={{ marginTop: '1rem' }}
-                                    optionLabel="name"
+                                    optionLabel="label"
                                     options={raceOptions}
                                     placeholder="Select D&D Race" />} />
                             <ErrorMessage name='chosenRace' />

@@ -11,3 +11,15 @@ export const getClasses = async () => {
 
     return result;
 }
+
+export const getRaces = async () => {
+    const result = await axios.get("http://www.dnd5eapi.co/api/races")
+        .then(res => {
+            return res.data.results;
+        })
+        .catch(err => {
+            return err;
+        });
+
+    return result;
+}
