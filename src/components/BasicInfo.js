@@ -93,8 +93,9 @@ const BasicInfo = () => {
                                     {...field}
                                     className="dropdownFormElement"
                                     style={{ marginTop: '1rem' }}
-                                    optionLabel="name"
+                                    optionLabel="label"
                                     options={classOptions}
+                                    value={classOptions}
                                     placeholder="Select D&D Class" />} />
                             <ErrorMessage name='chosenClass' />
                             <Button label="Select" className="dropdownFormElement dropdownFormButton p-button-raised" style={{ marginTop: '1rem' }} />
