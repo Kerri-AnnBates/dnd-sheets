@@ -6,12 +6,12 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { createProficienciesList } from './createProficienciesList';
 import { createLanguagesList } from './createLanguagesList';
-import { getClasses, getRaces } from '../api/api';
+import { getClasses, getRaces, getProficiencies, getLanguages } from '../api/api';
 
 const basicInfoSchema = Yup.object().shape({
     chosenName: Yup.string().notRequired(),
-    chosenClass: Yup.string().required('Class is required'),
-    chosenRace: Yup.string().required('Race is required'),
+    // chosenClass: Yup.string().required('Class is required'),
+    // chosenRace: Yup.string().required('Race is required'),
 });
 
 const BasicInfo = () => {
@@ -20,8 +20,8 @@ const BasicInfo = () => {
     const [raceOptions, setRaceOptions] = useState([]);
     const [getClass, setClass] = useState("");
     const [getRace, setRace] = useState("");
-    const [proficiencies] = useState([]);
-    const [languages] = useState([]);
+    const [proficiencies, setproficiencies] = useState([]);
+    const [languages, setLanguages] = useState([]);
 
     const fetchData = async () => {
         const classResults = await getClasses();
@@ -55,19 +55,35 @@ const BasicInfo = () => {
         fetchData();
     }, []);
 
-    const onClassChange = (e) => {
-        setClass(e.value.value);
+    const handleClassChange = (e) => {
+        setClass(e.value);
     }
 
-    const onRaceChange = (e) => {
-        setRace(e.value.value);
+    const handleRaceChange = (e) => {
+        setRace(e.value);
     }
 
     const handleSubmit = (e) => {
         const chosenClass = e.chosenClass.name;
         const chosenRace = e.chosenRace.name;
-        console.log("chosen class:", chosenClass);
-        console.log("chosen race:", chosenRace);
+        // console.log("chosen class:", chosenClass);
+        // console.log("chosen race:", chosenRace);
+
+        if (getRace) {
+            getLanguages(getRace)
+                .then(data => {
+                    const langs = data.map(lang => lang.name);
+                    setLanguages(langs);
+                });
+        }
+
+        if (getClass) {
+            getProficiencies(getClass)
+                .then(data => {
+                    const profs = data.map(prof => prof.name);
+                    setproficiencies(profs);
+                });
+        }
 
     }
 
@@ -101,7 +117,7 @@ const BasicInfo = () => {
                 {() => (
                     <Form>
                         <div className="dropdownFormContainer">
-                            <Field name="chosenRace" htmlFor="chosenRace">
+                            <Field name="chosenRace" as="select">
                                 {({ field }) =>
                                     <Dropdown
                                         {...field}
@@ -110,8 +126,9 @@ const BasicInfo = () => {
                                         className="dropdownFormElement"
                                         style={{ marginTop: '1rem' }}
                                         options={raceOptions}
-                                        value={field}
-                                        onChange={onRaceChange}
+                                        optionLabel={raceOptions.label}
+                                        value={getRace}
+                                        onChange={handleRaceChange}
                                         placeholder="Select D&D Race" />}
                             </Field>
                             <ErrorMessage name='chosenRace' />
@@ -125,8 +142,9 @@ const BasicInfo = () => {
                                         className="dropdownFormElement"
                                         style={{ marginTop: '1rem' }}
                                         options={classOptions}
-                                        // value={getClass}
-                                        onChange={onClassChange}
+                                        optionLabel={classOptions.label}
+                                        value={getClass}
+                                        onChange={handleClassChange}
                                         placeholder="Select D&D Class" />}
                             </Field>
                             <ErrorMessage name='chosenClass' />
