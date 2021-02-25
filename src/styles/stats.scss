@@ -87,8 +87,11 @@ overflow: hidden;
 }
 
 @media (min-width: 560px) {
+    .dropdownFormElement {
+        width: 50%;
+    }
+
     .dropdownFormButton {
-        -ms-flex-preferred-size: 100%;
-        flex-basis: 100%;
+        width: 100%;
     }
 }
