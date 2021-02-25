@@ -17,9 +17,9 @@ const basicInfoSchema = Yup.object().shape({
 const BasicInfo = () => {
     const [getName, setName] = useState("");
     const [classOptions, setClassOptions] = useState([]);
-    const [raceOptions, setRaceResults] = useState([]);
-    const [getClass, setGetClass] = useState("");
-    const [getRace, setGetRace] = useState("");
+    const [raceOptions, setRaceOptions] = useState([]);
+    const [getClass, setClass] = useState("");
+    const [getRace, setRace] = useState("");
     const [proficiencies] = useState([]);
     const [languages] = useState([]);
 
@@ -45,7 +45,7 @@ const BasicInfo = () => {
             });
 
             setClassOptions(classData);
-            setRaceResults(raceData);
+            setRaceOptions(raceData);
         } else {
             console.log("Error");
         }
@@ -56,16 +56,19 @@ const BasicInfo = () => {
     }, []);
 
     const onClassChange = (e) => {
-        setGetClass(e.value.value);
+        setClass(e.value.value);
     }
 
     const onRaceChange = (e) => {
-        setGetRace(e.value.value);
+        setRace(e.value.value);
     }
 
     const handleSubmit = (e) => {
         const chosenClass = e.chosenClass.name;
         const chosenRace = e.chosenRace.name;
+        console.log("chosen class:", chosenClass);
+        console.log("chosen race:", chosenRace);
+
     }
 
     const setCharacterName = e => {
@@ -76,52 +79,62 @@ const BasicInfo = () => {
         <>
             <h2>Choose name, race & class</h2>
             <Formik>
-                <Field name="chosenName" render={({ field }) =>
-                    <span className='p-float-label' style={{ marginTop: '1rem' }}>
-                        <InputText id='chosenName' {...field} value={getName} onChange={e => {
-                            setCharacterName(e.target.value)
-                        }} style={{ width: '100%' }} />
-                        <label htmlFor='chosenName'>Enter Name</label>
-                    </span>
-                } />
+                <Field name="chosenName">
+                    {({ field }) =>
+                        <span className='p-float-label' style={{ marginTop: '1rem' }}>
+                            <InputText id='chosenName' {...field} value={getName} onChange={e => {
+                                setCharacterName(e.target.value)
+                            }} style={{ width: '100%' }} />
+                            <label htmlFor='chosenName'>Enter Name</label>
+                        </span>
+                    }
+                </Field>
             </Formik>
             <Formik
                 initialValues={{
-                    chosenClass: '',
-                    chosenRace: ''
+                    chosenClass: "",
+                    chosenRace: ""
                 }}
                 validationSchema={basicInfoSchema}
                 onSubmit={e => handleSubmit(e)}
-                render={() => (
+            >
+                {() => (
                     <Form>
                         <div className="dropdownFormContainer">
-                            <Field name="chosenRace" render={({ field }) =>
-                                <Dropdown
-                                    {...field}
-                                    className="dropdownFormElement"
-                                    style={{ marginTop: '1rem' }}
-                                    optionLabel="label"
-                                    options={raceOptions}
-                                    onChange={onRaceChange}
-                                    placeholder="Select D&D Race" />} />
+                            <Field name="chosenRace" htmlFor="chosenRace">
+                                {({ field }) =>
+                                    <Dropdown
+                                        {...field}
+                                        id="chosenRace"
+                                        name="chosenRace"
+                                        className="dropdownFormElement"
+                                        style={{ marginTop: '1rem' }}
+                                        options={raceOptions}
+                                        value={field}
+                                        onChange={onRaceChange}
+                                        placeholder="Select D&D Race" />}
+                            </Field>
                             <ErrorMessage name='chosenRace' />
 
-                            <Field name="chosenClass" render={({ field }) =>
-                                <Dropdown
-                                    {...field}
-                                    className="dropdownFormElement"
-                                    style={{ marginTop: '1rem' }}
-                                    optionLabel="label"
-                                    options={classOptions}
-                                    value={classOptions}
-                                    onChange={onClassChange}
-                                    placeholder="Select D&D Class" />} />
+                            <Field name="chosenClass">
+                                {({ field }) =>
+                                    <Dropdown
+                                        {...field}
+                                        id="chosenClass"
+                                        name="chosenClass"
+                                        className="dropdownFormElement"
+                                        style={{ marginTop: '1rem' }}
+                                        options={classOptions}
+                                        // value={getClass}
+                                        onChange={onClassChange}
+                                        placeholder="Select D&D Class" />}
+                            </Field>
                             <ErrorMessage name='chosenClass' />
-                            <Button label="Select" className="dropdownFormElement dropdownFormButton p-button-raised" style={{ marginTop: '1rem' }} />
+                            <Button type="submit" label="Select" className="dropdownFormElement dropdownFormButton p-button-raised" style={{ marginTop: '1rem' }} />
                         </div>
                     </Form>
                 )}
-            />
+            </Formik>
             <div>
                 <h3 className="NameRaceClass">{getName} {(getName && getRace && getClass) ? "the" : null} {getRace} {getClass}</h3>
             </div>
